@@ -1,0 +1,9 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: bootAdmin
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 10.134.150.115:8848

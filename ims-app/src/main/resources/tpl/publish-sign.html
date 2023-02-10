@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <base href="${base}/">
+    <link href="element/element.min.css" rel="stylesheet">
+</head>
+<body>
+<div id="app">
+    <template>
+        <div>
+            <el-button @click="showModal" type="primary">发布签到信息</el-button>
+        </div>
+        <el-table
+                :data="publishSignList"
+                height="550"
+                style="width: 100%">
+            <el-table-column
+                    prop="id"
+                    label="id"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="sign_id"
+                    label="签到唯一标识"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="sign_name"
+                    label="签到名称"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="address_detail"
+                    label="签到地址"
+                    width="180">
+            </el-table-column>
+            <el-table-column
+                    prop="lat"
+                    label="签到维度">
+            </el-table-column>
+            <el-table-column
+                    prop="lon"
+                    label="签到经度">
+            </el-table-column>
+            <el-table-column
+                    prop="dept_id"
+                    label="学院">
+                <template slot-scope="scope">
+            <span>
+                {{deptList.find((item) => item.value === scope.row.dept_id).label || ""}}
+            </span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="kc_id"
+                    label="课程">
+                <template slot-scope="scope">
+                  <span>
+                      {{kcList.find((item) => item.value === scope.row.kc_id).label || ""}}
+                  </span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="teacher_id"
+                    label="签到老师">
+                <template slot-scope="scope">
+                    <span>
+                        {{teacherList.find((item) => item.value === scope.row.teacher_id).label || ""}}
+                    </span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="grade_id"
+                    label="年级">
+                <template slot-scope="scope">
+                    <span>
+                        {{gradeList.find((item) => item.value === scope.row.grade_id).label || ""}}
+                    </span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="sign_distance"
+                    width="80"
+                    label="最小签到距离">
+            </el-table-column>
+            <el-table-column
+                    prop="must_sign_num"
+                    width="80"
+                    label="应签到数量">
+            </el-table-column>
+            <el-table-column
+                    prop="has_sign_num"
+                    width="80"
+                    label="实际签到数量">
+            </el-table-column>
+            <el-table-column
+                    prop="sign_time"
+                    width="180"
+                    label="签到时间">
+                <template slot-scope="scope">
+                    <span>{{ parseDateFull(scope.row.sign_time) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="sign_last_time"
+                    width="180"
+                    label="签到最晚时间">
+                <template slot-scope="scope">
+                    <span>{{ parseDateFull(scope.row.sign_last_time) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    fixed="right"
+                    label="操作"
+                    width="120">
+                <template slot-scope="{row}">
+                    <el-button
+                            @click.native.prevent="updateRow(row.id,row)"
+                            type="text"
+                            size="small">
+                        修改
+                    </el-button>
+                    <el-button
+                            @click.native.prevent="delRow(row.id, row)"
+                            type="text"
+                            size="small">
+                        删除
+                    </el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="font-normal">
+            <el-pagination
+                    layout="total, sizes,prev,pager,next,jumper"
+                    :page-size="pageParams.pageSize"
+                    :page-sizes="[3,5,7,10]"
+                    :total="total"
+                    :current-page.sync="curPage"
+                    @current-change="hCurrentChange"
+                    @size-change="hSizeChange"
+            />
+        </div>
+        <el-dialog
+                title="提示"
+                :visible.sync="dialogFormVisible"
+                width="50%"
+                :before-close="handleClose">
+            <el-form :model="signForm" status-icon :rules="signFormRule" ref="signForm" label-width="120px">
+                <div style="display: none">
+                    <el-form-item label="showId">
+                        <el-input
+                                v-model="showId"
+                                :disabled="true">
+                        </el-input>
+                    </el-form-item>
+                </div>
+                <el-form-item label="签到名称" prop="sign_name">
+                    <el-input
+                            v-model="signForm.sign_name"
+                            :disabled="false">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="学院" prop="dept_id">
+                    <el-select v-model="signForm.dept_id" placeholder="请选择">
+                        <el-option
+                                v-for="item in deptList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item label="签到老师" prop="teacher_id">
+                    <el-select v-model="signForm.teacher_id" placeholder="请选择">
+                        <el-option
+                                v-for="item in teacherList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="课程" prop="kc_id">
+                    <el-select v-model="signForm.kc_id" placeholder="请选择">
+                        <el-option
+                                v-for="item in kcList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="年级" prop="grade_id">
+                    <el-select v-model="signForm.grade_id" placeholder="请选择">
+                        <el-option
+                                v-for="item in gradeList"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="签到距离" prop="sign_distance">
+                    <el-input
+                            v-model="signForm.sign_distance"
+                            oninput="value=value.replace(/[^\d.]/g,'')"
+                            :disabled="false">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="应签到数量" prop="must_sign_num">
+                    <el-input
+                            v-model="signForm.must_sign_num"
+                            oninput="value=value.replace(/[^\d.]/g,'')"
+                            :disabled="false">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="签到时间" prop="must_sign_num">
+                    <el-date-picker
+                            v-model="signForm.sign_time"
+                            type="datetime"
+                            placeholder="选择日期时间">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="签到最晚时间" prop="must_sign_num">
+                    <el-date-picker
+                            v-model="signForm.sign_last_time"
+                            type="datetime"
+                            placeholder="选择日期时间">
+                    </el-date-picker>
+                </el-form-item>
+                <el-form-item label="纬度">
+                    <el-input
+                            v-model="signForm.lat"
+                            :disabled="true">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="经度">
+                    <el-input
+                            v-model="signForm.lon"
+                            :disabled="true">
+                    </el-input>
+                </el-form-item>
+                <el-form-item label="定位地址信息" prop="address_detail">
+                    <el-input v-model="signForm.address_detail"></el-input>
+                </el-form-item>
+                <el-form-item label="地图展示" prop="sign_status">
+                    <el-button type="primary" @click="searchPlace">搜索地址</el-button>
+                    <div id="map" style="width: 100%; height:400px;"></div>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="cancel">取 消</el-button>
+                    <el-button type="primary" @click="submitForm('signForm')">确 定</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+    </template>
+</div>
+</template>
+</div>
+<script src="element/vue.min.js"></script>
+<script src="element/element.min.js"></script>
+<script src="element/axios.min.js"></script>
+<script type="text/javascript"
+        src="https://api.map.baidu.com/api?type=webgl&v=1.0&ak=qQpfDCC9SwBXAYUwRZ1cA2D0LVe080Uj"></script>
+<script  type="text/javascript" src="../static/sign-publish.js"></script>
+</body>
+</html>

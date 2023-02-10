@@ -1,0 +1,51 @@
+magic-api:
+  web: /magic/web
+  # 接口配置文件存放路径
+  resource.location: D:/kc/magic-script
+spring:
+  application:
+    name: ims-app
+  # 数据源
+# 配置mysql数据库
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://49.232.80.209:33070/ims-app?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+#    url: jdbc:mysql://10.134.150.115:33068/ims-app?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: 123654
+    hikari:
+      minimum-idle: 5
+      # 空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+      # 连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      # 此属性控制从池返回的连接的默认自动提交行为,默认值：true
+      auto-commit: true
+      # 连接池名称
+      pool-name: MyHikariCP
+      # 此属性控制池中连接的最长生命周期，值0表示无限生命周期，默认1800000即30分钟
+      max-lifetime: 1800000
+      # 数据库连接超时时间,默认30秒，即30000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+  #静态资源
+  mvc:
+    static-path-pattern: /static/**
+
+  cloud:
+    nacos:
+      discovery:
+#        server-addr: 10.134.150.115:8848
+        server-addr: 49.232.80.209:8848
+
+server:
+  port: 8008
+

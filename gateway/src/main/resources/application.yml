@@ -1,0 +1,33 @@
+#server:
+#  port: 88
+#
+#spring:
+#  application:
+#    name: gateway
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: 10.134.150.115:8848
+#    gateway:
+#      discovery:
+#        locator:
+#          enabled: true
+#          lower-case-service-id: true
+#      routes:
+#        - id: edu   # 自定义的路由 ID，保持唯一
+##          uri: lb://edu
+#          uri: http://localhost:8001  # 目标服务地址 (跳转到此路径)
+#          predicates: # 路由条件，Predicate 接受一个输入参数，返回一个布尔值结果
+#            - Path=/edu/**
+##          filters:
+##            - StripPrefix=1
+##            - RewritePath=/api/(?<segment>.*),/$\{segment}
+#
+##        - id: ims
+##          uri: lb://ims
+##          predicates:
+##            - Path=/api/ims/**
+##          filters:
+##            - RewritePath=/api/(?<segment>.*),/$\{segment}
+#
+#

@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: fileView
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 43.140.250.153:8848
