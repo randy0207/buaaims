@@ -28,6 +28,9 @@ ims/
 *.iml
 *.ipr
 
+ims-mini/
+ims-app/
+
 ### NetBeans ###
 nbproject/private/
 build/*

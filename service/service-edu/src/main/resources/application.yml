@@ -10,7 +10,7 @@ spring:
     name: edu # 服务名
   datasource: # mysql数据库连接
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://43.140.250.153:33060/online-edu?serverTimezone=GMT%2B8
+    url: jdbc:mysql://10.134.151.254:38306/online-edu?serverTimezone=GMT%2B8
     username: root
     password: 123456
 
@@ -22,7 +22,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 43.140.250.153:8848 # nacos服务地址
+        server-addr: 10.134.151.254:8848 # nacos服务地址
 
 #    sentinel:
 #      transport:
@@ -30,10 +30,10 @@ spring:
 #        dashboard: 43.140.250.153:8080 # 指定控制台服务的地址
   #spring:
   redis:
-    host: 43.140.250.153
-    port: 6380
-    database: 1
-    #    password: 123456My! #默认为空
+    host: 10.134.151.254
+    port: 63680
+    database: 2
+    password: 123456 #默认为空
     lettuce:
       pool:
         max-active: 20  #最大连接数，负值表示没有限制，默认8
