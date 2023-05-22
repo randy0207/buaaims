@@ -14,9 +14,9 @@ spring:
 
 aliyun:
   oss:
-    url: http://qqinstitute.oss-cn-beijing.aliyuncs.com/
+    url: https://buaaims.oss-cn-beijing.aliyuncs.com
     endpoint: oss-cn-beijing.aliyuncs.com
-    keyid: LTAI5tGGbifpikph8Nz1fqmE
-    keysecret: wPOgoTdPML2MGxi3stbj3wnXVlEwk9
+    keyid: LTAI5tQdYwW8vuZuzGFXFBnc
+    keysecret: wElL2XsCGdgad16AgP79BsEQxpPuqJ
     #bucket可以在控制台创建，也可以使用java代码创建，注意先测试bucket是否已被占用
-    bucketname: qqinstitute
+    bucketname: buaaims

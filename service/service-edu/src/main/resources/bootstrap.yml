@@ -4,7 +4,7 @@ spring:
   cloud:
     nacos:
       config:
-        server-addr: 49.232.80.209:8848 #nacos中心地址
+        server-addr: 10.134.151.254:8848 #nacos中心地址
         file-extension: yaml # 配置文件格式，如果是properties文件则不用配置此项
         namespace: b9d07e2d-0866-4bab-9c21-269cd6129c6a
 

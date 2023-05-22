@@ -49,7 +49,7 @@ spring:
   # es配置 若搜索模式为mysql可删除
   elasticsearch:
     rest:
-      uris: 43.140.250.153:9200
+      uris: 10.134.151.254:9200
   # 邮箱配置
   mail:
     host: smtp.qq.com
